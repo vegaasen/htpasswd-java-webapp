@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <name>HTPassword generation</name>
+    <description>Simple WebApp project that supplies both REST-services for htpasswd generation, and normal with a simple webpage</description>
+
 	<groupId>com.vegaasen.htpasswd</groupId>
 	<artifactId>htpasswd</artifactId>
-	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <repositories>
 		<repository>
@@ -74,6 +78,18 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.6</version>
+        </dependency>
+
         <!-- HIBERNATE DEPENDENCIES -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -105,7 +121,7 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.14</version>
+			<version>1.2.16</version>
 		</dependency>
 
     </dependencies>
@@ -135,7 +151,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
                 <configuration>
+                    <outputDirectory>${project.basedir}/target</outputDirectory>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
@@ -146,7 +164,12 @@
                 <version>${maven-jetty-plugin.version}</version>
 
                 <configuration>
-                    <scanIntervalSeconds>9999</scanIntervalSeconds>
+                    <connectors>
+                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+                            <port>7001</port>
+                        </connector>
+                    </connectors>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
                     <systemProperties>
                         <systemProperty>
                             <name>org.mortbay.util.URI.charset</name>
@@ -157,6 +180,9 @@
                             <value>${project.build.sourceEncoding}</value>
                         </systemProperty>
                     </systemProperties>
+                     <systemPropertiesFile>
+                        ${project.basedir}/src/main/resources/jetty.properties
+		    		</systemPropertiesFile>
                     <contextPath>app</contextPath>
                 </configuration>
             </plugin>

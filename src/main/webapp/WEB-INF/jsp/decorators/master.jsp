@@ -3,26 +3,23 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    
-    <title><decorator:title default="Hello World"/></title>
+    <link href="css/site.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>
+        <decorator:title default="Fallback Title - Change please!!"/>
+    </title>
     <decorator:head/>
 </head>
-<body>
-
-<div id="container">
-
-    <div id="header">
-        <h1> This is common header! </h1>
-    </div>
-    <div id="content">
-        <decorator:body/>
-    </div>
-
-    <div id="footer">
-    </div>
-</div>
-
-
-</body>
+    <body>
+        <div id="container">
+            <div id="header">
+                <h1>htpasswd-generator</h1>
+            </div>
+            <div id="main">
+                <decorator:body/>
+            </div>
+            <div id="footer">
+            </div>
+        </div>
+    </body>
 </html>

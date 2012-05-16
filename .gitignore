@@ -1,6 +1,15 @@
+# Folders
+*/target
+
+# Java generated elements
 *.class
 
-# Package Files #
+# Java Package Files
 *.jar
 *.war
 *.ear
+
+# IDE Specifics
+*.iml
+*.ipr
+*.iws
