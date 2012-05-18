@@ -4,17 +4,28 @@ package com.vegaasen.htpasswd.model;
  * @author vegaasen
  */
 public enum HTPasswdVariant {
-    USE_SHA1_WITH_BASE64("SHA-1"),
-    USE_MD5_WITH_SALT("MD-5"),
-    USE_CRYPT("Crypt");
+    ALG_APSHA("ALG_APSHA"),
+    ALG_APMD5("ALG_APMD5"),
+    ALG_CRYPT("ALG_CRYPT");
 
-    private String methodType;
+    private String digestType;
 
-    HTPasswdVariant(String methodType) {
-        this.methodType = methodType;
+    HTPasswdVariant(String digestType) {
+        this.digestType = digestType;
     }
 
-    public String getMethodType() {
-        return methodType;
+    public String getDigestType() {
+        return digestType;
     }
+
+    public static HTPasswdVariant find(final String digestType) {
+    if (digestType != null) {
+      for (HTPasswdVariant currHtpasswd : HTPasswdVariant.values()) {
+        if (digestType.equalsIgnoreCase(currHtpasswd.getDigestType())) {
+          return currHtpasswd;
+        }
+      }
+    }
+    return null;
+  }
 }

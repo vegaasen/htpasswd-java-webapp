@@ -1,0 +1,3 @@
+2012-05-18 17:20:45,563 [18800445@qtp-10708076-3] DEBUG com.vegaasen.htpasswd.util.HTPasswdGenerator - Using CRYPT
+2012-05-18 17:20:46,016 [18800445@qtp-10708076-3] INFO  com.vegaasen.htpasswd.util.HTPasswdGenerator - Hashing complete. Returning result <Crypt>
+2012-05-18 17:20:56,608 [11932128@qtp-10708076-5] DEBUG com.vegaasen.htpasswd.util.HTPasswdGenerator - Using MD5 + SALT

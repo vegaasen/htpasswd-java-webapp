@@ -10,9 +10,12 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import static com.vegaasen.htpasswd.util.hash.Crypt.cryptUsingStandardDES;
+import static com.vegaasen.htpasswd.util.hash.Crypt.generateSalt;
+
 /**
  * Simple Htpasswd generator
- *
+ * <p/>
  * Can use both SHA-1 and MD-5 solutions. Please address that the SHA-1 solution is more apprecated than the MD-5 one.
  *
  * @author vegaasen
@@ -21,22 +24,25 @@ import java.security.NoSuchAlgorithmException;
 public class HTPasswdGenerator extends AbstractUtil {
 
     private static final Logger LOGGER = Logger.getLogger(HTPasswdGenerator.class);
-
-    public static final String IDENTIFIER_SHA = "{SHA}";
-    public static final String IDENTIFIER_MD5 = "MD5";
-    public static final String MD_5_SEPERATOR = ":";
+    private static final String V_APACHE_REALM_NAME = "apache.realm.name";
+    private static final String RESULT_IDENTIFIER_SHA = "{SHA}";
+    private static final String RESULT_IDENTIFIER_MD5 = "$apr1$";
+    private static final String IDENTIFIER_MD5 = "MD5";
+    private static final String MD_5_SEPERATOR = ":";
+    private static final String DEFAULT_REALM_WIN_NAME = "Velkommen til WIN FTP. Vennligst oppgi ditt brukernavn/passord.";
 
     public static String generateEncryptedPassword(final String usr, final String pwd, final HTPasswdVariant type)
             throws NullPointerException {
-        if(verifyNotNull(pwd, type)) {
-            if(StringUtils.isNotEmpty(pwd)) {
+        if (verifyNotNull(pwd, type)) {
+            if (StringUtils.isNotEmpty(pwd)) {
                 switch (type) {
-                    case USE_SHA1_WITH_BASE64:
+                    case ALG_APSHA:
                         LOGGER.debug("Using SHA-1 with BASE-64");
                         return generateSha1Representation(pwd);
-                    case USE_CRYPT:
+                    case ALG_CRYPT:
                         LOGGER.debug("Using CRYPT");
-                    case USE_MD5_WITH_SALT:
+                        return generateCryptRepresentation(pwd);
+                    case ALG_APMD5:
                         LOGGER.debug("Using MD5 + SALT");
                         return generateMD5Representation(pwd, usr);
                     default:
@@ -44,41 +50,46 @@ public class HTPasswdGenerator extends AbstractUtil {
                 }
             }
         }
+        LOGGER.error("Halted. Missing vital parameters.");
         throw new NullPointerException(E_OBJECT_WAS_NULL);
     }
 
     private static String generateSha1Representation(final String pwd) {
-        if(StringUtils.isNotEmpty(pwd)) {
-            String result = IDENTIFIER_SHA + new String(Base64.encodeBase64(
+        if (StringUtils.isNotEmpty(pwd)) {
+            LOGGER.debug("Hashing complete. Returning result <SHA1>");
+            return RESULT_IDENTIFIER_SHA + new String(Base64.encodeBase64(
                     getMessageDigest("SHA1").digest(
                             pwd.getBytes()
                     )
             ));
         }
+        LOGGER.debug("Unable to generate password using SHA-1. Missing parameter");
         return "";
     }
 
     private static String generateMD5Representation(final String pwd, final String usr) {
-        try{
-            byte digestedBytes[] = getMessageDigest(IDENTIFIER_MD5).digest(
-                    (
-                            usr +
-                            MD_5_SEPERATOR +
-                            PropertiesUtil.loadProperties().get("apache.realm.name") +
-                            MD_5_SEPERATOR +
-                            pwd
-                    )
-                    .getBytes());
+        try {
+            String realm = String.valueOf(PropertiesUtil.loadProperties().get(V_APACHE_REALM_NAME)!=null ?
+                    PropertiesUtil.loadProperties().get(V_APACHE_REALM_NAME) :
+                    DEFAULT_REALM_WIN_NAME);
+            String assembledString = usr + MD_5_SEPERATOR + realm + MD_5_SEPERATOR + pwd;
+            byte digestedBytes[] = getMessageDigest(IDENTIFIER_MD5).digest((assembledString).getBytes());
             BigInteger bigInteger = new BigInteger(1, digestedBytes);
             String result = bigInteger.toString(16);
             while (result.length() < 32) {
                 result = "0" + result;
             }
-            return result;
-        }catch (Exception e) {
+            LOGGER.debug("Hashing complete. Returning result <MD5>: " + RESULT_IDENTIFIER_MD5 + result);
+            return RESULT_IDENTIFIER_MD5 + result;
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private static String generateCryptRepresentation(final String pwd) {
+        LOGGER.debug("Hashing complete. Returning result <Crypt>");
+        return cryptUsingStandardDES(generateSalt(), pwd);
     }
 
     private static MessageDigest getMessageDigest(final String type) {
