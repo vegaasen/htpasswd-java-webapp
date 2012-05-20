@@ -5,23 +5,16 @@ import org.apache.commons.lang.StringUtils;
 import java.util.Random;
 
 /**
- * ORIGINAL-TEXT:
  * *************************************************************************
  * Java-based implementation of the unix crypt(3) command
- * <p/>
  * Based upon C source code written by Eric Young, eay@psych.uq.oz.au
  * Java conversion by John F. Dumas, jdumas@zgs.com
- * <p/>
- * Found at http://locutus.kingwoodcable.com/jfd/crypt.html
- * Minor optimizations by Wes Biggs, wes@cacas.org
- * <p/>
- * Eric's original code is licensed under the BSD license.  As this is
- * derivative, the same license applies.
- * <p/>
- * Note: Crypt.class is much smaller when compiled with javac -O
+ * Can be located at http://locutus.kingwoodcable.com/jfd/crypt.html
+ * Eric's original code is licensed under the BSD license.  As this is derivative, the same license applies.
  * **************************************************************************
- * <p/>
- * I've modified this code a bit to be 1.6 compatible, and made it a bit faster + fixed a quirk
+ *
+ * - I've modified this code a bit to be 1.6 compatible, and made it a bit faster + fixed a number of quirks
+ * - I did also create a generateSalt()
  *
  * @author unknown
  * @author vegaasen
@@ -29,8 +22,9 @@ import java.util.Random;
 
 public class Crypt {
 
-    private Crypt() {
-    } // defined so class can't be instantiated.
+    private Crypt() {}
+
+    public static final String alphabet = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     private static final int ITERATIONS = 16;
 
@@ -449,7 +443,7 @@ public class Crypt {
             s = ((s >>> 16) | (t & 0xffff0000));
 
             s = (s << 4) | (s >>> 28);
-            schedule[j++] = s & 0xffffffff;
+            schedule[j++] = s;
         }
         return schedule;
     }
@@ -529,8 +523,11 @@ public class Crypt {
         return out;
     }
 
-    public static final String alphabet = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
+    /**
+     * Generate a salt based on Alpha-chars
+     *
+     * @return generated salt
+     */
     public static String generateSalt() {
         String salt = "";
         Random r = new Random();
@@ -542,8 +539,15 @@ public class Crypt {
         return salt;
     }
 
-    public static String cryptUsingStandardDES(String salt, String original) {
-        // wwb -- Should do some sanity checks: salt needs to be 2 chars, in alpha.
+    /**
+     * Using Crypt(3), generate a string based on a salt and the actual password that
+     * should be hashed.
+     *
+     * @param salt (optional) - if the salt has not been supplied, a random salt will be generated.
+     * @param original (required) the actual password as a string
+     * @return the generated String as crypt-hashed
+     */
+    public static String cryptUsingStandardDES(String salt, final String original) {
         if(StringUtils.isEmpty(salt)) {
             salt = generateSalt();
         }

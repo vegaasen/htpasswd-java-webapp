@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="form-wrapper">
-                <form action="generator" onsubmit="" method="post" autocomplete="off" enctype="application/x-www-form-urlencoded">
+                <form action="#" onsubmit="" method="post" autocomplete="off" enctype="application/x-www-form-urlencoded">
                     <div class="input-frame-wrapper">
                         <div class="input-fields">
                             <div class="input-frame">
@@ -80,7 +80,7 @@
                                 ${v_usr}:${v_genpwd}
                             </code>
                         </div>
-                        <form action="htpasswd_${v_usr}.text" method="post" enctype="application/x-www-form-urlencoded">
+                        <form action="/app/htpasswd_${v_usr}.text" method="post" enctype="application/x-www-form-urlencoded">
                             <div class="input-buttons">
                                 <div class="hidden-fields">
                                     <input type="hidden" name="usr" id="gen_usr" value="${v_usr}" class="hidden"/>

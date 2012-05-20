@@ -14,22 +14,27 @@ import static com.vegaasen.htpasswd.util.hash.Crypt.cryptUsingStandardDES;
 import static com.vegaasen.htpasswd.util.hash.Crypt.generateSalt;
 
 /**
- * Simple Htpasswd generator
+ * Simple Htpassword generator
  * <p/>
- * Can use both SHA-1 and MD-5 solutions. Please address that the SHA-1 solution is more apprecated than the MD-5 one.
+ * All three hashing methods is avail:
+ * - SHA-1
+ * - MD-5
+ * - Crypt(3)
+ *
+ * Please address that SHA-1 or Crypt is > MD-5.
  *
  * @author vegaasen
  * @since 1.0-SNAPSHOT
  */
-public class HTPasswdGenerator extends AbstractUtil {
+public class HashingDigester extends AbstractUtil {
 
-    private static final Logger LOGGER = Logger.getLogger(HTPasswdGenerator.class);
+    private static final Logger LOGGER = Logger.getLogger(HashingDigester.class);
     private static final String V_APACHE_REALM_NAME = "apache.realm.name";
     private static final String RESULT_IDENTIFIER_SHA = "{SHA}";
     private static final String RESULT_IDENTIFIER_MD5 = "$apr1$";
     private static final String IDENTIFIER_MD5 = "MD5";
     private static final String MD_5_SEPERATOR = ":";
-    private static final String DEFAULT_REALM_WIN_NAME = "Velkommen til WIN FTP. Vennligst oppgi ditt brukernavn/passord.";
+    private static final String DEFAULT_REALM_WIN_NAME = "Top Secret";
 
     public static String generateEncryptedPassword(final String usr, final String pwd, final HTPasswdVariant type)
             throws NullPointerException {
@@ -73,7 +78,7 @@ public class HTPasswdGenerator extends AbstractUtil {
                     PropertiesUtil.loadProperties().get(V_APACHE_REALM_NAME) :
                     DEFAULT_REALM_WIN_NAME);
             String assembledString = usr + MD_5_SEPERATOR + realm + MD_5_SEPERATOR + pwd;
-            byte digestedBytes[] = getMessageDigest(IDENTIFIER_MD5).digest((assembledString).getBytes());
+            byte digestedBytes[] = getMessageDigest(IDENTIFIER_MD5).digest(assembledString.getBytes());
             BigInteger bigInteger = new BigInteger(1, digestedBytes);
             String result = bigInteger.toString(16);
             while (result.length() < 32) {

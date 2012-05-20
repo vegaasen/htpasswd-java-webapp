@@ -1,13 +1,14 @@
 package com.vegaasen.htpasswd.web.controller;
 
 import com.vegaasen.htpasswd.model.HTPasswdVariant;
-import com.vegaasen.htpasswd.util.HTPasswdGenerator;
+import com.vegaasen.htpasswd.util.HashingDigester;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import sun.plugin2.message.Message;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +57,7 @@ public class HTPwdController {
 
                 HTPasswdVariant htDigest = HTPasswdVariant.find(digest);
 
-                String result = HTPasswdGenerator.generateEncryptedPassword(usr, pwd, htDigest);
+                String result = HashingDigester.generateEncryptedPassword(usr, pwd, htDigest);
 
                 view.addObject("v_genpwd", result);
                 view.addObject("v_usr", usr);

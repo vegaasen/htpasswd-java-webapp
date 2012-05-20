@@ -1,5 +1,10 @@
 # Folders
-*/target
+/logs
+/logs/
+/logs/*
+/target
+/target/
+/target/*
 
 # Java generated elements
 *.class

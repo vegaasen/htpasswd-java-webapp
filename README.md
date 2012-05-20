@@ -14,4 +14,5 @@ The "default operation" will be Crypt(3)
 
 ## Todo's
 
-Create a simple REST based service, so that one don't have to actually use the jsp representation
+-Create a simple REST based service, so that one don't have to actually use the jsp representation
+-Create a simple Runnable so that the application can also be used as a simple command-prompt-tool
