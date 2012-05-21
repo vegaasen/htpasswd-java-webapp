@@ -1,10 +1,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
         <title><fmt:message key="generator.title"/></title>
     </head>
+    <c:set var="usernamePattern"><fmt:message key="pattern.default.regexp"/></c:set>
     <body>
         <div class="content">
             <div class="info">
@@ -20,7 +22,7 @@
                                 <label for="usr" class="input-label label"><fmt:message key="generator.form.username"/></label>
                                 <input type="text" class="input-field field"
                                        placeholder="t&lt;signature&gt;" required="required"
-                                       pattern="^[tT]([0-9+].*)$" maxlength="7" autofocus="true"
+                                       pattern="${usernamePattern}" maxlength="7" autofocus="true"
                                        id="usr" name="usr" value="${v_usr}" />
                             </div>
                             <div class="input-frame">

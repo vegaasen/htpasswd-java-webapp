@@ -4,16 +4,16 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 
-import com.vegaasen.htpasswd.ApplicationContextAwareTest;
+import com.vegaasen.htpasswd.ApplicationContextTest;
 import com.vegaasen.htpasswd.server.dao.DummyDAO;
 import com.vegaasen.htpasswd.server.entity.DummyEntity;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * 
+ *  
  */
-public class SimpleIntegrationTest extends ApplicationContextAwareTest {
+public class SimpleIntegrationTest extends ApplicationContextTest {
 
     @Resource
     private DummyDAO dummyDAO;

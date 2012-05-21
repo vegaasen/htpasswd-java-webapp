@@ -1,0 +1,21 @@
+@charset "utf-8";
+@font-face {
+    font-family: 'UbuntuRegular';
+    src: url('/app/resources/fonts/Ubuntu-R-webfont.eot');
+    src: url('/app/resources/fonts/Ubuntu-R-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/app/resources/fonts/Ubuntu-R-webfont.woff') format('woff'),
+         url('/app/resources/fonts/Ubuntu-R-webfont.ttf') format('truetype'),
+         url('/app/resources/fonts/Ubuntu-R-webfont.svg#UbuntuRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'UbuntuBold';
+    src: url('/app/resources/fonts/Ubuntu-B-webfont.eot');
+    src: url('/app/resources/fonts/Ubuntu-B-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/app/resources/fonts/Ubuntu-B-webfont.woff') format('woff'),
+         url('/app/resources/fonts/Ubuntu-B-webfont.ttf') format('truetype'),
+         url('/app/resources/fonts/Ubuntu-B-webfont.svg#UbuntuBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

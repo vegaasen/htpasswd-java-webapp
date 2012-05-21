@@ -4,14 +4,31 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>HTPassword generation</name>
-    <description>Simple WebApp project that supplies both REST-services for htpasswd generation, and normal with a
-        simple webpage
+    <description>
+        Simple WebApp project that supplies both :
+        a) REST-services for htpasswd generation
+        b) Normal Webpage services (through REST-Tactics)
     </description>
 
     <groupId>com.vegaasen.htpasswd</groupId>
     <artifactId>htpasswd</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+
+    <developers>
+        <developer>
+            <name>Vegard Aasen</name>
+            <email>vegaasen@gmail.com</email>
+            <id>vegaasen</id>
+            <url>http://www.vegaasen.com/</url>
+            <organization>AWSome</organization>
+            <roles>
+                <role>
+                    Developer
+                </role>
+            </roles>
+        </developer>
+    </developers>
 
     <repositories>
         <repository>
@@ -70,7 +87,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.1</version>
+            <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -131,14 +148,12 @@
 
     <build>
         <finalName>${project.artifactId}-${project.version}.${project.packaging}</finalName>
-
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
             </resource>
         </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -152,20 +167,9 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <outputDirectory>${project.basedir}/target</outputDirectory>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
                 <version>${maven-jetty-plugin.version}</version>
-
                 <configuration>
                     <connectors>
                         <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
@@ -189,11 +193,8 @@
                     <contextPath>app</contextPath>
                 </configuration>
             </plugin>
-
-
         </plugins>
     </build>
-
 
     <properties>
         <jetty.version>6.1.4</jetty.version>

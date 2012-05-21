@@ -22,11 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @see org.springframework.transaction.annotation.Transactional
  * @see org.hibernate.Session#setFlushMode(org.hibernate.FlushMode)
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
-@TransactionConfiguration(defaultRollback = true, transactionManager = "transactionManager")
 @Transactional
-public abstract class ApplicationContextAwareTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {
+        "classpath:applicationContext.xml"
+})
+@TransactionConfiguration(defaultRollback = true, transactionManager = "transactionManager")
+public abstract class ApplicationContextTest {
 
     @Autowired
     public SessionFactory sessionFactory;
