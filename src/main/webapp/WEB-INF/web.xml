@@ -4,21 +4,17 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
-    
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:/applicationContext.xml</param-value>
     </context-param>
 
-    <jsp-config>
-        <jsp-property-group>
-          <url-pattern>*.jsp</url-pattern>
-          <page-encoding>utf-8</page-encoding>
-        </jsp-property-group>
-    </jsp-config>
-
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
     <filter>
@@ -33,7 +29,7 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
-    
+
     <filter>
         <filter-name>sitemesh</filter-name>
         <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
@@ -43,7 +39,6 @@
         <filter-name>staticContentFilter</filter-name>
         <filter-class>com.vegaasen.htpasswd.web.util.filter.StaticContentFilter</filter-class>
     </filter>
-
 
     <filter-mapping>
         <filter-name>staticContentFilter</filter-name>
@@ -75,9 +70,26 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>rest</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>
+                classpath:rest-servlet.xml
+            </param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>app</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/app/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>rest</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>
@@ -96,6 +108,12 @@
         <extension>woff</extension>
         <mime-type>application/x-font-woff</mime-type>
     </mime-mapping>
-    
+
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>utf-8</page-encoding>
+        </jsp-property-group>
+    </jsp-config>
 
 </web-app>
