@@ -31,9 +31,10 @@ public class StartJettyContainer {
     public static void initiateAndStartServer() {
         LOGGER.debug("Initiating Jetty");
         Server server = new Server();
-        WebAppContext context = new WebAppContext();
+        WebAppContext webAppContext = new WebAppContext();
         SelectChannelConnector channelConnector = new SelectChannelConnector();
         ProtectionDomain domain = StartJettyContainer.class.getProtectionDomain();
+
         URL location = domain.getCodeSource().getLocation();
 
         LOGGER.debug("Configuring channel connector");
@@ -44,13 +45,18 @@ public class StartJettyContainer {
         server.setConnectors(new Connector[]{channelConnector});
 
         LOGGER.debug("Setting context");
-        context.setContextPath("/app");
-        context.setDescriptor(location.toExternalForm() + "/WEB-INF/web.xml");
-        context.setServer(server);
-        context.setWar(location.toExternalForm());
+        webAppContext.setServer(server);
+        webAppContext.setContextPath("/");
+        LOGGER.debug("Loading resources from " + location.toExternalForm());
+        webAppContext.setDefaultsDescriptor("org/eclipse/jetty/webapp/webdefault.xml");
+        // To run without any problems: target/htpasswd/WEB-INF/web.xml (or whatever that is defined as the "finalName")
+        webAppContext.setDescriptor(location.toExternalForm() + "WEB-INF/web.xml");
+        webAppContext.setTempDirectory(null);
+        // To run without any problems: target/htpasswd (or whatever that is defined as the "finalName")
+        webAppContext.setResourceBase(location.toExternalForm());
 
         LOGGER.debug("Setting handlers");
-        server.setHandler(context);
+        server.setHandler(webAppContext);
 
         try {
             LOGGER.debug("Trying to start");
