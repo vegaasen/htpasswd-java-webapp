@@ -33,9 +33,9 @@
         </property>
     </bean>
 
-    <!--bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+    <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
         <property name="supportedMediaTypes" value="application/json"/>
-    </bean-->
+    </bean>
 
     <bean id="digest" class="org.springframework.web.servlet.view.xml.MarshallingView">
         <constructor-arg ref="jaxbMarshaller"/>

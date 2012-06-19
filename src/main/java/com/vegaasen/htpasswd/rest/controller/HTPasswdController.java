@@ -6,6 +6,11 @@ import com.vegaasen.htpasswd.util.HashingDigester;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.parsing.Location;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 
 /**
  * Simple controller for the rest-based-services for generating htpasswd-results
- *
+ * <p/>
  * TODO: A lot.
  *
  * @author vegaasen
@@ -34,12 +40,13 @@ public class HTPasswdController {
 
     private static final Logger LOGGER = Logger.getLogger(HTPasswdController.class);
 
-    @SuppressWarnings({"unused", "all"}) private Jaxb2Marshaller jaxMarshaller;
+    @SuppressWarnings({"unused", "all"})
+    private Jaxb2Marshaller jaxMarshaller;
 
     /**
      * Handle requests for processing an htpasswd to be used together with the apache-ftp-server
      * (or in other cases where htpasswd needs to be used)
-     *
+     * <p/>
      * Called from:
      * http://localhost:{PORT}/rest/generate?usr=USER&pwd=PASSWORD&digestType=CRYPT_TYPE
      *
@@ -51,10 +58,10 @@ public class HTPasswdController {
      * @return jsp-mapping
      */
     @RequestMapping(
-            value = "generate",
+            value = "generate/xml",
             method = {RequestMethod.GET},
             headers = {"Accept=application/xml"},
-            produces = "application/xml"
+            produces = {"application/xml"}
     )
     public
     @ResponseBody
@@ -77,6 +84,31 @@ public class HTPasswdController {
             model.setGeneratedPassword(result);
         }
         LOGGER.debug("Returning result");
+        return model;
+    }
+
+    @RequestMapping(
+            value="genereate/json",
+            method = {RequestMethod.GET},
+            consumes = "application/json",
+            produces = {"application/json"}
+    )
+    public @ResponseBody DigestResultModel handleGenerateJsonRequest (
+             @SuppressWarnings("unused") final HttpServletRequest request,
+            @SuppressWarnings("unused") HttpServletResponse response,
+            @RequestParam(value = "usr", defaultValue = "") String usr,
+            @RequestParam(value = "pwd", defaultValue = "") String pwd,
+            @RequestParam(value = "digestType", defaultValue = "ALG_CRYPT") String digest
+    ){
+        LOGGER.debug("Creating digestmodel.");
+        DigestResultModel model = new DigestResultModel();
+        model.setGeneratedDate(new Date());
+        if (StringUtils.isNotEmpty(usr) && StringUtils.isNotEmpty(pwd) && StringUtils.isNotEmpty(digest)) {
+            LOGGER.debug("Using JSON as result");
+            MappingJacksonHttpMessageConverter jsonConverter =
+                    new MappingJacksonHttpMessageConverter();
+            MediaType jsonMimeType = MediaType.APPLICATION_JSON;
+        }
         return model;
     }
 

@@ -7,6 +7,8 @@
         <title><fmt:message key="generator.title"/></title>
     </head>
     <c:set var="usernamePattern"><fmt:message key="pattern.default.regexp"/></c:set>
+    <c:set var="usernamePlaceholder"><fmt:message key="generator.form.username.placeholder.value"/></c:set>
+    <c:set var="passwordPlaceholder"><fmt:message key="generator.form.password.placeholder.value"/></c:set>
     <body>
         <div class="content">
             <div class="info">
@@ -15,20 +17,20 @@
                 </div>
             </div>
             <div class="form-wrapper">
-                <form action="#" onsubmit="" method="post" autocomplete="off" enctype="application/x-www-form-urlencoded">
+                <form action="${pageContext.request.requestURI}" onsubmit="" method="post" autocomplete="off" enctype="application/x-www-form-urlencoded">
                     <div class="input-frame-wrapper">
                         <div class="input-fields">
                             <div class="input-frame">
                                 <label for="usr" class="input-label label"><fmt:message key="generator.form.username"/></label>
                                 <input type="text" class="input-field field"
-                                       placeholder="t&lt;signature&gt;" required="required"
+                                       placeholder="${usernamePlaceholder}" required="required"
                                        pattern="${usernamePattern}" maxlength="7" autofocus="true"
                                        id="usr" name="usr" value="${v_usr}" />
                             </div>
                             <div class="input-frame">
                                 <label for="pwd" class="input-label label"><fmt:message key="generator.form.password"/></label>
                                 <input type="password" class="input-field field"
-                                       placeholder="&lt;some password&gt;"
+                                       placeholder="${passwordPlaceholder}"
                                        required="required" value="${v_pwd}" id="pwd" name="pwd" />
                             </div>
                         </div>
@@ -39,7 +41,29 @@
                                 </div>
                                 <div class="radio-group">
                                     <div class="radio-button">
-                                        <input required="required" class="radio" type="radio" value="ALG_APSHA" id="ALG_APSHA" name="digestType"/>
+                                        <c:choose>
+                                            <c:when test="${v_digestType eq 'ALG_CRYPT'}">
+                                                <input required="required" checked="checked" class="radio" type="radio" id="ALG_CRYPT" value="ALG_CRYPT" name="digestType"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input required="required" checked="checked" class="radio" type="radio" id="ALG_CRYPT" value="ALG_CRYPT" name="digestType"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <label for="ALG_CRYPT">Crypt</label>
+                                        <a href="#" class="what-link">?</a>
+                                        <span class="what-is-this">
+                                            <fmt:message key="generator.algorithm.crypt"/>
+                                        </span>
+                                    </div>
+                                    <div class="radio-button">
+                                        <c:choose>
+                                            <c:when test="${v_digestType eq 'ALG_APSHA'}">
+                                                <input required="required" checked="checked" class="radio" type="radio" value="ALG_APSHA" id="ALG_APSHA" name="digestType"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input required="required" class="radio" type="radio" value="ALG_APSHA" id="ALG_APSHA" name="digestType"/>
+                                            </c:otherwise>
+                                        </c:choose>
                                         <label for="ALG_APSHA">SHA-1</label>
                                         <a href="#" class="what-link">?</a>
                                         <span class="what-is-this">
@@ -47,19 +71,18 @@
                                         </span>
                                     </div>
                                     <div class="radio-button">
-                                        <input required="required" class="radio" type="radio" id="ALG_APMD5" value="ALG_APMD5" name="digestType"/>
+                                        <c:choose>
+                                            <c:when test="${v_digestType eq 'ALG_APMD5'}">
+                                                <input required="required" checked="checked" class="radio" type="radio" id="ALG_APMD5" value="ALG_APMD5" name="digestType"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input required="required" class="radio" type="radio" id="ALG_APMD5" value="ALG_APMD5" name="digestType"/>
+                                            </c:otherwise>
+                                        </c:choose>
                                         <label for="ALG_APMD5">MD-5</label>
                                         <a href="#" class="what-link">?</a>
                                         <span class="what-is-this">
                                             <fmt:message key="generator.algorithm.md5"/>
-                                        </span>
-                                    </div>
-                                    <div class="radio-button">
-                                        <input required="required" class="radio" type="radio" id="ALG_CRYPT" value="ALG_CRYPT" name="digestType"/>
-                                        <label for="ALG_CRYPT">Crypt</label>
-                                        <a href="#" class="what-link">?</a>
-                                        <span class="what-is-this">
-                                            <fmt:message key="generator.algorithm.crypt"/>
                                         </span>
                                     </div>
                                 </div>
@@ -78,9 +101,7 @@
                             <div class="title">
                                 <fmt:message key="generator.form.result.title"/>
                             </div>
-                            <code class="r">
-                                ${v_usr}:${v_genpwd}
-                            </code>
+                            <code class="r">${v_usr}:${v_genpwd}</code>
                         </div>
                         <form action="/app/htpasswd_${v_usr}.text" method="post" enctype="application/x-www-form-urlencoded">
                             <div class="input-buttons">

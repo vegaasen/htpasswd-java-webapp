@@ -109,6 +109,12 @@
             <version>1.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.7</version>
+        </dependency>
+
         <!-- HIBERNATE DEPENDENCIES -->
         <dependency>
             <groupId>org.hibernate</groupId>
