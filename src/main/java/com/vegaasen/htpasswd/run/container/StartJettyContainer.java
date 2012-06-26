@@ -49,10 +49,8 @@ public class StartJettyContainer {
         webAppContext.setContextPath("/");
         LOGGER.debug("Loading resources from " + location.toExternalForm());
         webAppContext.setDefaultsDescriptor("org/eclipse/jetty/webapp/webdefault.xml");
-        // To run without any problems: target/htpasswd/WEB-INF/web.xml (or whatever that is defined as the "finalName")
         webAppContext.setDescriptor(location.toExternalForm() + "WEB-INF/web.xml");
         webAppContext.setTempDirectory(null);
-        // To run without any problems: target/htpasswd (or whatever that is defined as the "finalName")
         webAppContext.setResourceBase(location.toExternalForm());
 
         LOGGER.debug("Setting handlers");
