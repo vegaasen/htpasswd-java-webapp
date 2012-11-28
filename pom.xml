@@ -290,7 +290,7 @@
             Can be:
                 private, compile (default), provided, runtime, test, system
         -->
-        <project.scope.type>compile</project.scope.type>
+        <project.scope.type>provided</project.scope.type>
     </properties>
 
 </project>

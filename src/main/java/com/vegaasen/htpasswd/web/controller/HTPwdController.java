@@ -43,7 +43,7 @@ public class HTPwdController {
      * @param digest   Hashing algorithm
      * @return jsp-mapping
      */
-    @RequestMapping(value = "generator", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "generate", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView handleGenerateRequest(
             final HttpServletRequest request,
             HttpServletResponse response,

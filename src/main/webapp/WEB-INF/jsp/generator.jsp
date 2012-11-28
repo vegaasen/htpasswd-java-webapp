@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="form-wrapper">
-                <form action="generator" onsubmit="" method="post" autocomplete="off" enctype="application/x-www-form-urlencoded">
+                <form action="generate" onsubmit="" method="post" enctype="application/x-www-form-urlencoded">
                     <div class="input-frame-wrapper">
                         <div class="input-fields">
                             <div class="input-frame">
