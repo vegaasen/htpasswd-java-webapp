@@ -29,7 +29,7 @@ import java.util.Date;
 @RequestMapping("/")
 public class HTPwdController {
 
-    private static final String MT_TEXT_RICH = "text/richtext";
+    private static final String MT_TEXT_RICH = "htaccess/apache";
     private static final String UTF_8 = "UTF-8";
 
     /**
@@ -76,7 +76,7 @@ public class HTPwdController {
      * @return a file in mime-type text/richtext containing what has been generated from the /generator-mapping
      * @throws IOException _
      */
-    @RequestMapping(value = "htpasswd_{usr}.text", method = RequestMethod.POST)
+    @RequestMapping(value = "htpasswd_{usr}.text", method = {RequestMethod.GET, RequestMethod.POST})
     public String handleDownloadRequest(
             final HttpServletRequest request,
             HttpServletResponse response,
